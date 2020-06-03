@@ -9,7 +9,7 @@ public class TestModel {
 		Model model = new Model();
 		System.out.println(model.getNercList());
 
-		List<PowerOutage> ls=model.worstCase(new Nerc(3, "MAAC"), 4, 2);
+		List<PowerOutage> ls=model.worstCase(new Nerc(3, "MAAC"), 4, 2000);
 		System.out.println(ls);
 		int somma=0;
 		for (PowerOutage p:ls)

@@ -4,14 +4,15 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 public class PowerOutage {
-	
+
 	private int eventId;
 	private Nerc nerc;
 	private Timestamp dateBegan;
 	private Timestamp dateFinished;
 	private int customersAffected;
 	private int hourInterval;
-	
+	private int year;
+
 	public PowerOutage(int eventId, Nerc nerc, Timestamp dateBegan, Timestamp dateFinished, int customersAffected) {
 		super();
 		this.eventId = eventId;
@@ -19,13 +20,18 @@ public class PowerOutage {
 		this.dateBegan = dateBegan;
 		this.dateFinished = dateFinished;
 		this.customersAffected = customersAffected;
-		this.hourInterval=getHourGap(dateFinished, dateBegan);
+		this.hourInterval = getHourGap(dateFinished, dateBegan);
+		this.year = dateBegan.toLocalDateTime().getYear();
+	}
+
+	public int getYear() {
+		return year;
 	}
 
 	public int getHourInterval() {
 		return hourInterval;
 	}
-	
+
 	public int getEventId() {
 		return eventId;
 	}
@@ -70,12 +76,11 @@ public class PowerOutage {
 
 	@Override
 	public String toString() {
-		return dateBegan.toLocalDateTime().getYear()+" " +dateBegan+ " " + dateFinished + " " + hourInterval + " " + customersAffected+"\n";
+		return year + " " + dateBegan + " " + dateFinished + " " + hourInterval + " " + customersAffected + "\n";
 	}
-	
-	private int getHourGap (Timestamp d2, Timestamp d1) {
-		return (int)(d2.getTime()-d1.getTime())/(1000*60*60);
+
+	private int getHourGap(Timestamp d2, Timestamp d1) {
+		return (int) (d2.getTime() - d1.getTime()) / (1000 * 60 * 60);
 	}
-	
 
 }

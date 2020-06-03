@@ -1,10 +1,12 @@
 package it.polito.tdp.poweroutages;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.poweroutages.model.Model;
 import it.polito.tdp.poweroutages.model.Nerc;
+import it.polito.tdp.poweroutages.model.PowerOutage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -39,7 +41,28 @@ public class FXMLController {
 
     @FXML
     void doAnalyze(ActionEvent event) {
-
+    	try {
+    		txtCombination.clear();
+    		int maxYears=Integer.parseInt(txtYears.getText());
+    		int maxHours=Integer.parseInt(txtHours.getText());
+    		Nerc nerc=chBoxNERC.getValue();
+    		List<PowerOutage> combination= model.worstCase(nerc, maxYears, maxHours);
+    		txtCombination.setText("Event for nerc "+nerc.getValue()+" :"+model.getOutagesByNerc(nerc).size()+"\n");
+    		txtCombination.appendText("Tot people affected: "+model.getWorstAffected()+"\n");
+    		txtCombination.appendText("Tot hours of outage: "+model.sumHoursValue(combination)+"\n");
+    		String s="";
+    		for (PowerOutage p: combination)
+    		{
+    			s+=p.toString();
+    		}
+    		txtCombination.appendText(s);
+    	}
+    	catch(NumberFormatException e) {
+    		txtCombination.setText("Errore inserimento dati");
+    	}
+    	catch (Exception e) {
+			txtCombination.setText("Errore di runtime");
+		}
     }
 
     @FXML
@@ -56,7 +79,7 @@ public class FXMLController {
 		this.model=model;
 		chBoxNERC.getItems().addAll(model.getNercList());
 		chBoxNERC.setValue(model.getNercList().get(0));
-		// TODO Auto-generated method stub
+		txtCombination.setStyle("-fx-font-family: monospace");
 		
 	}
 }
